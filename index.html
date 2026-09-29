@@ -4,6 +4,9 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="format-detection" content="telephone=no, date=no, email=no" />
 <meta name="color-scheme" content="dark" />
 <meta name="theme-color" content="#07090f" />
 <meta name="description" content="A private wedding invitation." />
@@ -458,7 +461,7 @@ footer strong { color: var(--gold); font-weight: 500; }
 .music-toggle, .contact-button {
   display: inline-flex; align-items: center; justify-content: center; width: 43px; height: 43px;
   border: 1px solid var(--line); border-radius: 50%; color: var(--gold-bright); background: rgba(7,9,15,.78);
-  box-shadow: 0 6px 19px rgba(0,0,0,.22); cursor: pointer; text-decoration: none; backdrop-filter: blur(8px);
+  box-shadow: 0 6px 19px rgba(0,0,0,.22); cursor: pointer; text-decoration: none; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
 }
 .music-toggle { position: relative; }
 .music-toggle[data-state="playing"] .music-note { animation: pulse 1.8s infinite; }
@@ -644,6 +647,19 @@ html:has(body.is-locked) { overflow: hidden; overscroll-behavior: none; }
 .seal-button::after { content: ""; position: absolute; inset: -9px; border: 2px solid rgba(255,231,168,.85); border-radius: 50%; pointer-events: none; animation: seal-ring 2s ease-out infinite; }
 @keyframes seal-ring { 0% { transform: scale(.92); opacity: .95; } 100% { transform: scale(1.5); opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .opening-bottom p, .seal-button::after { animation: none; } }
+
+/* iOS + Android shared compatibility */
+* { -webkit-tap-highlight-color: transparent; }
+html, body { overscroll-behavior-y: none; -webkit-overflow-scrolling: touch; }
+.seal-button, .music-toggle, .contact-button, .rsvp-choice button, .rsvp-occasion, .rsvp-submit {
+  -webkit-touch-callout: none; -webkit-user-select: none; user-select: none;
+}
+input, textarea, select { -webkit-appearance: none; appearance: none; border-radius: 8px; }
+audio { display: none; }
+@supports (-webkit-touch-callout: none) {
+  .hero { min-height: -webkit-fill-available; }
+  .opening-scene { min-height: -webkit-fill-available; }
+}
 </style>
 </head>
 <body class="is-locked">
@@ -917,6 +933,7 @@ async function toggleMusic() {
   else { music.pause(); setMusicState(false); }
 }
 musicToggle.addEventListener('click', toggleMusic); music.addEventListener('play', () => setMusicState(true)); music.addEventListener('pause', () => setMusicState(false)); music.addEventListener('error', () => setMusicState(false, false));
+document.addEventListener('touchmove', (e) => { if (document.body.classList.contains('is-locked')) e.preventDefault(); }, { passive: false });
 $('openInvitation').addEventListener('click', () => {
   music.play().then(() => setMusicState(true)).catch(() => setMusicState(false, false));
   const opening = $('opening'); const sceneSeal = $('sceneSeal'); const sceneBismillah = $('sceneBismillah');
