@@ -1014,7 +1014,7 @@ try{localStorage.removeItem(storageKey);}catch(e){} update();
     const name=$('rsvpName').value.trim(); if(!name){ err.textContent='Please enter your name.'; $('rsvpName').focus(); return; }
     const chosen=[...document.querySelectorAll('.rsvp-occasion')].filter(l=>l.querySelector('input').checked).map(l=>l.dataset.name+' ('+l.querySelector('select').value+')');
     if(attending&&!chosen.length){ err.textContent='Please select at least one occasion.'; return; }
-    const msg=attending?'Assalamu alaikum! '+name+' will joyfully attend: '+chosen.join(', ')+'.':'Assalamu alaikum! '+name+' regretfully cannot attend. Wishing you both every blessing.';
+    const msg=attending?'Hi! '+name+' will joyfully attend: '+chosen.join(', ')+'.':'Hi! '+name+' regretfully cannot attend. Wishing you both every blessing.';
     $('rsvpThanksTitle').textContent=attending?'See you there!':'You will be missed';
     $('rsvpThanksText').textContent=attending?'Thank you, '+name+'. We have noted: '+chosen.join(', ')+'.':'Thank you for letting us know, '+name+'. Your blessings mean the world to us.';
     const w=(($('whatsapp')&&$('whatsapp').value)||'').replace(/[^\d]/g,''), a=$('rsvpWhats');
